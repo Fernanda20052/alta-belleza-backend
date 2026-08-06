@@ -9,7 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/detalles")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://alta-belleza-frontend.vercel.app"
+})
 public class DetallePedidoController {
 
     @Autowired
@@ -17,9 +20,7 @@ public class DetallePedidoController {
 
     @GetMapping("/{pedidoId}")
     public List<DetallePedido> obtenerDetalles(
-
             @PathVariable Long pedidoId
-
     ) {
 
         return detallePedidoRepository.findByPedidoId(pedidoId);

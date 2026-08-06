@@ -3,6 +3,7 @@ package com.maquillaje.maquillajebackend.config;
 import com.maquillaje.maquillajebackend.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -80,20 +80,26 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // Permitir solicitudes OPTIONS (CORS)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Autenticación
                         .requestMatchers("/auth/registro").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/logout").permitAll()
 
+                        // Recursos públicos
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
 
+                        // API pública
                         .requestMatchers("/api/productos/**").permitAll()
                         .requestMatchers("/api/pedidos/**").permitAll()
                         .requestMatchers("/api/detalles/**").permitAll()
                         .requestMatchers("/api/favoritos/**").permitAll()
                         .requestMatchers("/api/contacto").permitAll()
 
-                        .requestMatchers("/uploads/**").permitAll()
-
+                        // Roles
                         .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/editor/**").hasRole("EDITOR")
                         .requestMatchers("/usuario/**").hasAnyRole("USUARIO", "ADMINISTRADOR")

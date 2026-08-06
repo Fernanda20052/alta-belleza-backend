@@ -11,7 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pedidos")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://alta-belleza-frontend.vercel.app"
+})
 public class PedidoController {
 
     @Autowired
