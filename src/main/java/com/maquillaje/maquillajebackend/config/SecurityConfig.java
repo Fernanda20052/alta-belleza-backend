@@ -42,8 +42,19 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:5173",
+                "https://alta-belleza-frontend.vercel.app"
+        ));
+
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+        ));
+
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -59,7 +70,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
 
                 .userDetailsService(customUserDetailsService)
@@ -74,13 +85,14 @@ public class SecurityConfig {
                         .requestMatchers("/auth/logout").permitAll()
 
                         .requestMatchers("/error").permitAll()
+
                         .requestMatchers("/api/productos/**").permitAll()
                         .requestMatchers("/api/pedidos/**").permitAll()
                         .requestMatchers("/api/detalles/**").permitAll()
                         .requestMatchers("/api/favoritos/**").permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
-
                         .requestMatchers("/api/contacto").permitAll()
+
+                        .requestMatchers("/uploads/**").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/editor/**").hasRole("EDITOR")
