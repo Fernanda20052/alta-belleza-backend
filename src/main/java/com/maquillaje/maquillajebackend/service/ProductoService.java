@@ -1,5 +1,7 @@
 package com.maquillaje.maquillajebackend.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.maquillaje.maquillajebackend.entity.Producto;
 import com.maquillaje.maquillajebackend.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 @Service
 public class ProductoService {
@@ -19,7 +18,8 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    private final String RUTA_UPLOADS = "src/main/resources/static/uploads/";
+    @Autowired
+    private Cloudinary cloudinary;
 
     // Mostrar solo productos activos
     public List<Producto> obtenerProductos() {
@@ -35,7 +35,7 @@ public class ProductoService {
 
     }
 
-    // Guardar producto con imagen
+    // Guardar producto con imagen en Cloudinary
     public Producto guardarProducto(
 
             MultipartFile imagen,
@@ -52,18 +52,19 @@ public class ProductoService {
 
     ) throws IOException {
 
-        String nombreImagen = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
+        Map uploadResult = cloudinary.uploader().upload(
+                imagen.getBytes(),
+                ObjectUtils.emptyMap()
+        );
 
-        Path ruta = Paths.get(RUTA_UPLOADS + nombreImagen);
-
-        Files.copy(imagen.getInputStream(), ruta);
+        String urlImagen = uploadResult.get("secure_url").toString();
 
         Producto producto = new Producto();
 
         producto.setNombre(nombre);
         producto.setDescripcion(descripcion);
         producto.setPrecio(precio);
-        producto.setImagen(nombreImagen);
+        producto.setImagen(urlImagen);
         producto.setCategoria(categoria);
         producto.setStock(stock);
         producto.setActivo(true);

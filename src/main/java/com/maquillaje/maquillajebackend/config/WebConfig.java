@@ -10,17 +10,17 @@ import java.nio.file.Paths;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    //@Override
+    //public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        String ruta = Paths.get("src/main/resources/static/uploads")
-                .toAbsolutePath()
-                .toUri()
-                .toString();
+       // String ruta = Paths.get("src/main/resources/static/uploads")
+             //   .toAbsolutePath()
+               // .toUri()
+               // .toString();
 
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(ruta);
-    }
+        //registry.addResourceHandler("/uploads/**")
+              //  .addResourceLocations(ruta);
+   // }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
