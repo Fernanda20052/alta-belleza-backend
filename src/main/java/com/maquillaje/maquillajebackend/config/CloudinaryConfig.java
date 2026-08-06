@@ -11,6 +11,12 @@ public class CloudinaryConfig {
     @Bean
     public Cloudinary cloudinary() {
 
+        System.out.println("===== CLOUDINARY =====");
+        System.out.println("Cloud Name: " + System.getenv("CLOUDINARY_CLOUD_NAME"));
+        System.out.println("API Key: " + System.getenv("CLOUDINARY_API_KEY"));
+        System.out.println("API Secret: " + System.getenv("CLOUDINARY_API_SECRET"));
+        System.out.println("======================");
+
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", System.getenv("CLOUDINARY_CLOUD_NAME"),
                 "api_key", System.getenv("CLOUDINARY_API_KEY"),

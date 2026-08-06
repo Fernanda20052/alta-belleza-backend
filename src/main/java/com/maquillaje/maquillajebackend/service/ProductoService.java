@@ -57,7 +57,12 @@ public class ProductoService {
                 ObjectUtils.emptyMap()
         );
 
+        System.out.println("Cloudinary respondió:");
+        System.out.println(uploadResult);
+
         String urlImagen = uploadResult.get("secure_url").toString();
+
+        System.out.println("URL Cloudinary: " + urlImagen);
 
         Producto producto = new Producto();
 
